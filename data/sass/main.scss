@@ -1,0 +1,150 @@
+@import "./bourbon/bourbon";
+@import "./base";
+@import "./variables";
+
+body{
+	overflow: auto;
+}
+
+.body-scroll-helper{
+	position: fixed;
+	width: 100%;
+	overflow-y: auto;
+	left:0;
+	right:0;
+	// bottom: 0;
+	top: 0;
+	&.transition{
+		@include transition-property(transform);
+		@include transition-duration(1.5s);
+		@include transition-timing-function(cubic-bezier(0.78, 0.04, 0.22, 0.96));
+		@include transition-delay(0s);
+		// @include transition(transform cubic-bezier(0.78, 0.04, 0.22, 0.96) 1500ms);
+	}
+}
+
+.first-section{
+	display: block;
+	max-height: 100vh;
+	overflow: hidden;
+	.background-image-container{
+	}
+	.background-image{
+		min-width: 100%;
+	}
+}
+
+
+.second-section{
+	position: relative;
+	background-color: $fav-color;
+	color: #fff;
+	margin-top: -80px;
+	padding: 80px;
+	@include linear-gradient(to right, $gradient-start-color, $gradient-end-color);
+
+	.heading{
+		font-weight: 700;
+		font-size: 30px;
+		letter-spacing: -0.5px;
+		text-shadow: 0px 6px 15px rgba(0,0,0,0.3);
+	}
+}
+
+
+$size: 260px;
+$spacing: 20px;
+
+.third-section{
+	position: relative;
+	.third-section-position-helper{
+		position: relative;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 4 * $size + 3 * $spacing;
+		margin-top: -2 * $spacing;
+		margin-bottom: 2 * $spacing;
+		@media screen and (max-width: 4 * $size + 5 * $spacing ){
+			width: 2 * $size  + $spacing;
+			.pane-container-row{
+				// margin-bottom: 0;
+			}
+		}
+	}
+}
+
+.pane{
+	position: relative;
+	margin-bottom: $spacing;
+	&.absolute{
+		position: absolute;
+	}
+	&.pane-medium{
+		$w: $size;
+		$h: $size;
+		height: $h;
+		width: $w;
+	}
+	&.pane-wide{
+		$w: 2 * $size + $spacing;
+		$h: $size;
+		height: $h;
+		width: $w;
+	}
+	&.pane-large{
+		$w: 2*$size + $spacing;
+		$h: $w ;
+		width: $w;
+		height: $h;
+	}
+	.pane-image-container{
+		background-color: #999;
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		&.pane-image-overlay{
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			background-color: $fav-color;
+			opacity: 0.6;
+		}
+	}
+}
+
+.pane-margin{
+	margin: $spacing;
+}
+.pane-margin-bottom{
+	margin-bottom: $spacing;
+}
+.pane-margin-top{
+	margin-top: $spacing;
+}
+.pane-margin-right{
+	margin-right: $spacing;
+}
+.pane-margin-left{
+	margin-left: $spacing;
+}
+
+.pane-container{
+	@include display(flex);
+	@include justify-content(flex-start);
+	@include align-items(space-between);
+	@include flex-direction(column);
+	@include flex-wrap(nowrap);
+
+	.pane-container-row{
+		@include display(flex);
+		@include flex-direction(row);
+		@include justify-content(space-between);
+		@include align-items(flex-start);
+		@include flex-wrap(wrap);
+	}
+}
