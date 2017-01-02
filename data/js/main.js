@@ -35,6 +35,7 @@ function init(){
 		// smoothScrollTo(0);
 		// console.log('is not mobile');
 	}else{
+		thirdSectionPositionHelper.setAttribute('data-open','true');
 		dummyScroll.setAttribute('style','height:0px');
 		bodyScrollHelper.setAttribute('class','body-scroll-helper relative');
 		// smoothScrollTo(0);
