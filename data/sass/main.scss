@@ -14,12 +14,12 @@ body{
 	right:0;
 	// bottom: 0;
 	top: 0;
+	@include transition-property(transform);
+	@include transition-duration(0ms);
+	@include transition-timing-function(cubic-bezier(0.78, 0.04, 0.22, 0.96));
+	@include transition-delay(0s);
 	&.transition{
-		@include transition-property(transform);
 		@include transition-duration(1.5s);
-		@include transition-timing-function(cubic-bezier(0.78, 0.04, 0.22, 0.96));
-		@include transition-delay(0s);
-		// @include transition(transform cubic-bezier(0.78, 0.04, 0.22, 0.96) 1500ms);
 	}
 	&.relative{
 		position: relative;
@@ -57,7 +57,7 @@ body{
 
 $size: 260px;
 $spacing: 20px;
-
+$padding: 30px;
 .third-section{
 	position: relative;
 	.third-section-position-helper{
@@ -65,13 +65,21 @@ $spacing: 20px;
 		display: block;
 		margin-left: auto;
 		margin-right: auto;
-		width: 4 * $size + 3 * $spacing;
-		margin-top: -2 * $spacing;
+		width: 4 * $size + 3 * $spacing + 2 * $padding;
+		margin-top: -2 * $spacing - $padding;
 		margin-bottom: 2 * $spacing;
-		@media screen and (max-width: 4 * $size + 5 * $spacing ){
+		padding: $padding;
+		overflow: hidden;
+		@media screen and (max-width: 4 * $size + 5 * $spacing + 2 * $padding ){
 			width: 2 * $size  + $spacing;
 			.pane-container-row{
 				// margin-bottom: 0;
+			}
+		}
+		&[data-open=false]{
+			.pane{
+				opacity: 0;
+				transform: translateY(400px);
 			}
 		}
 	}
@@ -80,20 +88,55 @@ $spacing: 20px;
 .pane{
 	position: relative;
 	margin-bottom: $spacing;
+	cursor: pointer;
+	@include transition(transform .7s cubic-bezier(.165,.84,.44,1),opacity .7s cubic-bezier(.165,.84,.44,1));
+	@include perspective(4 * $size + 5 * $spacing);
+	.pane-wrapper{
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		&:after{
+			content: ' ';
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 80;
+		}
+	}
 	&.absolute{
 		position: absolute;
+	}
+	.pane-title{
+		position: absolute;
+		bottom: 20px;
+		left: 20px;
+		z-index: 15;
+		font-size: 48px;
+		font-weight: bold;
+		letter-spacing: -1.75px;
+		color: rgba(255,255,255,0.8);
 	}
 	&.pane-medium{
 		$w: $size;
 		$h: $size;
 		height: $h;
 		width: $w;
+		.pane-title{
+			font-size: 36px;
+		}
 	}
 	&.pane-wide{
 		$w: 2 * $size + $spacing;
 		$h: $size;
 		height: $h;
 		width: $w;
+		.pane-title{
+			font-size: 42px;
+		}
 	}
 	&.pane-large{
 		$w: 2*$size + $spacing;
@@ -108,14 +151,35 @@ $spacing: 20px;
 		top: 0;
 		right: 0;
 		bottom: 0;
-		&.pane-image-overlay{
+		.pane-image-overlay{
 			position: absolute;
 			left: 0;
 			top: 0;
 			right: 0;
 			bottom: 0;
-			background-color: $fav-color;
-			opacity: 0.6;
+			background-color: rgba(0,0,0,0);
+			z-index: 5;
+			@include transition(opacity ease 300ms);
+			&:after{
+				content: ' ';
+				position: absolute;
+				left: 0;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				background-color: rgba(0,112,201,0.45);
+				opacity: 0;
+				@include transition(opacity ease 300ms);
+			}
+		}
+	}
+	&:hover{
+		.pane-image-container{
+			.pane-image-overlay{
+				&:after{
+					opacity: 1;
+				}
+			}
 		}
 	}
 }

@@ -1,7 +1,7 @@
 window.previousScrollY = 0;
 var paddingTopOfSecondSection = 80;
 var isScrolling = false;
-var isMobile = false;
+var isMobile;
 
 var backgroundImageContainer = document.getElementById('background-image-container');
 var thirdSectionPositionHelper = document.getElementById('third-section-position-helper');
@@ -19,7 +19,7 @@ function init(){
 		}
 		isMobile = true;
 	}else{
-		if(!isMobile){
+		if(isMobile==false){
 			return;
 		}
 		isMobile = false;
@@ -30,15 +30,14 @@ function init(){
 		dummyScroll.setAttribute('style','height:'+bodyScrollHelper.scrollHeight+'px');
 		window.addEventListener('scroll',function(){
 			var scrollY = window.scrollY;
-			// backgroundImageContainer.setAttribute('style','transform:translateY('+ scrollY/2 + 'px);');
 			handleQuantumScroll();
 		});
-		smoothScrollTo(0);
+		// smoothScrollTo(0);
 		// console.log('is not mobile');
 	}else{
 		dummyScroll.setAttribute('style','height:0px');
 		bodyScrollHelper.setAttribute('class','body-scroll-helper relative');
-		smoothScrollTo(0);
+		// smoothScrollTo(0);
 		// console.log('is mobile');
 	}
 	
@@ -63,18 +62,33 @@ function handleQuantumScroll(){
 		bodyScrollHelper.setAttribute('class','body-scroll-helper transition');
 		isScrolling = true;
 		setTimeout(function(){
-			smoothScrollTo(0);
+			smoothScrollTo(0,false,function(){
+				thirdSectionPositionHelper.setAttribute('data-open','false');
+			});
 		},50);
 	}else{
-		if(scrollY > previousScrollY && scrollY < criticalScroll){
+		if(scrollY > previousScrollY && scrollY <= criticalScroll){
+			//show third section
 			// window.scrollTo(0,criticalScroll);
 			// window.scroll({top:criticalScroll,left:0,behaviour:'smooth'});
 			bodyScrollHelper.setAttribute('class','body-scroll-helper transition');
 			isScrolling = true;
+			// console.log('data-open true');
 			setTimeout(function(){
-				smoothScrollTo(criticalScroll);
+				smoothScrollTo(criticalScroll, false, function(){
+					thirdSectionPositionHelper.setAttribute('data-open','true');
+				});
 			},50);
 		}else{
+			if(Math.abs(scrollY - previousScrollY) < 10 ){
+				if(scrollY <  previousScrollY){
+					scrollY = previousScrollY - 10;
+				}else{
+					scrollY = previousScrollY + 10;
+				}
+			}
+			// console.log('data-open true', scrollY, previousScrollY, criticalScroll);
+			thirdSectionPositionHelper.setAttribute('data-open','true');
 			bodyScrollHelper.setAttribute('class','body-scroll-helper');
 			smoothScrollTo(scrollY,true);
 		}
@@ -82,41 +96,31 @@ function handleQuantumScroll(){
 	previousScrollY = scrollY;
 	return false;
 }
-function smoothScrollTo(y, not_smooth){
+function smoothScrollTo(y, not_smooth, callback){
 	// console.log('smoothScrollTo',y);
 	// isScrolling = true;
 	if(!not_smooth || not_smooth == undefined ){
+		setTimeout(callback, 1000);
 		setTimeout(function(){
 			window.scrollTo(0,y);
 			previousScrollY = y;
 			isScrolling = false;
+			// if(typeof callback == 'function'){
+			// 	callback();
+			// }
 		},1500);
 	}
-	bodyScrollHelper.setAttribute('style','transform:translateY('+ -y +'px);');
-	window.scrollTo(0,y);
-}
-function smoothScrollBy(x){
-
-
-	return;
-	var sign = 1;
-	var scrollByPixels = 10;
-	if(x < 0){
-		sign = -1;
-		x = -x;
-	}
-
-	// console.log(sign, x);
-	if(x==0){
-		isScrolling = false;
-		return;
-	}
-	isScrolling = true;
-	window.scrollBy(0, sign * scrollByPixels);
-	setTimeout(function(){
-		if(x < scrollByPixels ){
-			x = scrollByPixels;
+	var tr = 'transform:translateY('+ -y +'px);';
+	var transformation = tr; 
+	transformation += '-webkit-'+tr;
+	transformation += '-moz-'+tr;
+	transformation += '-ms-'+tr;
+	transformation += '-o-'+tr;
+	bodyScrollHelper.setAttribute('style',transformation);
+	// window.scrollTo(0,y);
+	if(not_smooth==true){
+		if(typeof callback == 'function'){
+			callback();
 		}
-		smoothScrollBy( sign * ( x - scrollByPixels) );	
-	},scrollByPixels/10);
+	}
 }
