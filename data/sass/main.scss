@@ -21,6 +21,9 @@ body{
 		@include transition-delay(0s);
 		// @include transition(transform cubic-bezier(0.78, 0.04, 0.22, 0.96) 1500ms);
 	}
+	&.relative{
+		position: relative;
+	}
 }
 
 .first-section{
