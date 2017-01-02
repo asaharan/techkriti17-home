@@ -72,6 +72,8 @@ $padding: 30px;
 		overflow: hidden;
 		@media screen and (max-width: 4 * $size + 5 * $spacing + 2 * $padding ){
 			width: 2 * $size  + $spacing;
+			padding: 0;
+			overflow: auto;
 			.pane-container-row{
 				// margin-bottom: 0;
 			}
