@@ -19,6 +19,9 @@ function init(){
 		}
 		isMobile = true;
 	}else{
+		if(!isMobile){
+			return;
+		}
 		isMobile = false;
 	}
 	
