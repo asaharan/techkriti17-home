@@ -62,7 +62,7 @@ function handleQuantumScroll(){
 		//scroll to top
 		// window.scrollTo(0,0);
 		// window.scroll({top:0,left:0,behaviour:'smooth'});
-		if( scrollY < criticalScroll - 80 ){
+		if( scrollY < criticalScroll - 60 ){
 			bodyScrollHelper.setAttribute('class','body-scroll-helper transition');
 			isScrolling = true;
 			scrollCollector = 0;
