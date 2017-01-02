@@ -8,6 +8,8 @@ var thirdSectionPositionHelper = document.getElementById('third-section-position
 var bodyScrollHelper =  document.getElementById('body-scroll-helper');
 var dummyScroll = document.getElementById('dummy-scroll');
 
+var scrollCollector = 0;
+
 function init(){
 	// var backgroundImageContainer = document.getElementById('background-image-container');
 	// var thirdSectionPositionHelper = document.getElementById('third-section-position-helper');
@@ -60,13 +62,16 @@ function handleQuantumScroll(){
 		//scroll to top
 		// window.scrollTo(0,0);
 		// window.scroll({top:0,left:0,behaviour:'smooth'});
-		bodyScrollHelper.setAttribute('class','body-scroll-helper transition');
-		isScrolling = true;
-		setTimeout(function(){
-			smoothScrollTo(0,false,function(){
-				thirdSectionPositionHelper.setAttribute('data-open','false');
-			});
-		},50);
+		if( scrollY < criticalScroll - 80 ){
+			bodyScrollHelper.setAttribute('class','body-scroll-helper transition');
+			isScrolling = true;
+			scrollCollector = 0;
+			setTimeout(function(){
+				smoothScrollTo(0,false,function(){
+					thirdSectionPositionHelper.setAttribute('data-open','false');
+				});
+			},50);
+		}
 	}else{
 		if(scrollY > previousScrollY && scrollY <= criticalScroll){
 			//show third section
@@ -74,6 +79,7 @@ function handleQuantumScroll(){
 			// window.scroll({top:criticalScroll,left:0,behaviour:'smooth'});
 			bodyScrollHelper.setAttribute('class','body-scroll-helper transition');
 			isScrolling = true;
+			scrollCollector = 0;
 			// console.log('data-open true');
 			setTimeout(function(){
 				smoothScrollTo(criticalScroll, false, function(){
@@ -81,17 +87,23 @@ function handleQuantumScroll(){
 				});
 			},50);
 		}else{
-			if(Math.abs(scrollY - previousScrollY) < 10 ){
-				if(scrollY <  previousScrollY){
-					scrollY = previousScrollY - 10;
-				}else{
-					scrollY = previousScrollY + 10;
-				}
+
+			scrollCollector += (scrollY - previousScrollY);
+			if(Math.abs(scrollCollector) < 10){
+				return;
 			}
+			// if(Math.abs(scrollY - previousScrollY) < 10 ){
+			// 	if(scrollY <  previousScrollY){
+			// 		scrollY = previousScrollY - 10;
+			// 	}else{
+			// 		scrollY = previousScrollY + 10;
+			// 	}
+			// }
 			// console.log('data-open true', scrollY, previousScrollY, criticalScroll);
 			thirdSectionPositionHelper.setAttribute('data-open','true');
 			bodyScrollHelper.setAttribute('class','body-scroll-helper');
 			smoothScrollTo(scrollY,true);
+			scrollCollector = 0;
 		}
 	}
 	previousScrollY = scrollY;
