@@ -14,6 +14,9 @@ function init(){
 	// var bodyScrollHelper =  document.getElementById('body-scroll-helper');
 	// var dummyScroll = document.getElementById('dummy-scroll');
 	if(window.innerWidth < 900){
+		if(isMobile){
+			return false;
+		}
 		isMobile = true;
 	}else{
 		isMobile = false;
