@@ -1,5 +1,5 @@
 window.previousScrollY = 0;
-var paddingTopOfSecondSection = 80;
+var paddingTopOfSecondSection = 40;
 var isScrolling = false;
 var isMobile;
 
